@@ -1,0 +1,24 @@
+{
+  "name": "test-task",
+  "version": "1.0.0",
+  "description": "Test Task Repository - test-task 📋💻🖋️",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspace=client",
+    "start": "concurrently \"npm run start --workspace=server\" \"npm run start --workspace=client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "@types/css-modules": "^1.0.5"
+  }
+}

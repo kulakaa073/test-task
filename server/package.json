@@ -1,0 +1,31 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js",
+    "build": "tsc -p tsconfig.json",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "Shade",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.1",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.19.0",
+    "openai": "^6.1.0",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.1",
+    "@types/node": "^24.6.2",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.9.3"
+  }
+}
