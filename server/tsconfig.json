@@ -9,7 +9,6 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "es2017",
-    "types": [],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -33,11 +32,13 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
+    "strictNullChecks": true,
     "strict": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   }
 }

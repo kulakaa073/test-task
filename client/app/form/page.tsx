@@ -1,5 +1,12 @@
+'use client';
+import { LoginFormDynamic } from '@/components/LoginForm/LoginFormDynamic';
+
 const FormPage = () => {
-  return <div>Form</div>;
+  return (
+    <div>
+      <LoginFormDynamic />
+    </div>
+  );
 };
 
 export default FormPage;
