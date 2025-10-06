@@ -45,3 +45,5 @@ next-env.d.ts
 
 /client/.next
 client/.next/trace
+/client/.next
+client/.next/trace
