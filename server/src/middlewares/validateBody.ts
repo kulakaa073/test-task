@@ -9,6 +9,12 @@ export const validateBody =
         abortEarly: false,
       });
     } catch (error: any) {
-      reply.badRequest({ errors: error.details });
+      return reply.status(400).send({
+        status: 400,
+        message: 'Validation failed',
+        errors: error.details?.map((detail: any) => detail.message) || [
+          error.message,
+        ],
+      });
     }
   };

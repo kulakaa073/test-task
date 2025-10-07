@@ -17,6 +17,7 @@ export const registerController = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
+  console.log('auth controller');
   const body = request.body as UserRequest;
   const user = await registerService(body);
   reply.status(201).send({
