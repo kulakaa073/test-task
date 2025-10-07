@@ -5,17 +5,17 @@ import { generateToken } from '../utils/jwt.js';
 
 export const loginService = async (payload: UserRequest) => {
   const user = await UsersCollection.findOne({ email: payload.email });
+
   if (!user) {
     throw { statusCode: 404, message: 'User not found' };
   }
-
   const isEqual = await bcrypt.compare(payload.password, user.password);
 
   if (!isEqual) {
     throw { statusCode: 401, message: 'Unauthorized' };
   }
 
-  const token = generateToken(user.id);
+  const token = generateToken({ id: user.id });
 
   return { token };
 };

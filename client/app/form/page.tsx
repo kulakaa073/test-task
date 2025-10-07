@@ -1,10 +1,9 @@
-'use client';
-import { LoginFormDynamic } from '@/components/LoginForm/LoginFormDynamic';
+import { AuthFormDynamic } from '@/components/AuthForm/AuthFormDynamic';
 
 const FormPage = () => {
   return (
-    <div>
-      <LoginFormDynamic />
+    <div className="flex-1 flex items-center justify-center">
+      <AuthFormDynamic />
     </div>
   );
 };
