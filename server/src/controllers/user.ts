@@ -1,6 +1,4 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { loginService, registerService } from '../services/auth.js';
-import type { UserRequest } from '../validation/user.js';
 import { getCurrentUserService } from '../services/user.js';
 
 export const getCurrentUserController = async (

@@ -1,4 +1,4 @@
-import type { FastifyPluginAsync, RouteHandlerMethod } from 'fastify';
+import type { FastifyPluginAsync } from 'fastify';
 import { validateBody } from '../middlewares/validateBody.js';
 import { userSchema } from '../validation/user.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
