@@ -4,6 +4,7 @@ import cors from '@fastify/cors';
 import fastifySensible from '@fastify/sensible';
 import { regularRoutes } from './routes/api.js';
 import { authRoutes } from './routes/auth.js';
+import { stockRoutes } from './routes/stock.ts';
 
 const PORT = Number(getEnvVar('PORT', '3001'));
 const CLIENT_URL = getEnvVar('CLIENT_URL', 'http://localhost:3000');
@@ -15,6 +16,7 @@ export const startServer = async () => {
   server.register(fastifySensible);
 
   server.register(authRoutes, { prefix: '/auth' });
+  server.register(stockRoutes);
 
   server.listen({ port: PORT }, (err) => {
     if (err) {

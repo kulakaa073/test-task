@@ -7,15 +7,22 @@ import { useCallback, useMemo, useState } from 'react';
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import { AxiosError } from 'axios';
 
+type AuthMode = 'login' | 'signup';
+
+interface ErrorResponse {
+  errors?: string;
+  message?: string;
+}
+
 export const AuthForm = () => {
-  const [[page, direction], setPage] = useState([0, 0]);
+  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState(false);
   const searchParams = useSearchParams();
-  const mode = searchParams.get('mode') || 'signup';
+  const mode = (searchParams.get('mode') || 'signup') as AuthMode;
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -28,29 +35,31 @@ export const AuthForm = () => {
     setError(false);
   };
 
-  const validateEmail = (value: string) => {
+  const validateEmail = (value: string): boolean => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(value);
   };
 
-  const validatePassword = (value: string) => {
+  const validatePassword = (value: string): boolean => {
     return value.length > 8 && value.length < 128;
   };
 
-  const handleEmailChange = (value: string) => {
+  const handleEmailChange = (value: string): void => {
     setError(false);
     setEmail(value);
   };
-  const handlePasswordChange = (value: string) => {
+
+  const handlePasswordChange = (value: string): void => {
     setError(false);
     setPassword(value);
   };
-  const handleConfirmPasswordChange = (value: string) => {
+
+  const handleConfirmPasswordChange = (value: string): void => {
     setError(false);
     setConfirmPassword(value);
   };
 
-  const handleEmailSubmit = () => {
+  const handleEmailSubmit = (): void => {
     const isValid = validateEmail(email);
     if (!isValid) {
       setError(true);
@@ -59,8 +68,8 @@ export const AuthForm = () => {
     paginate(1);
   };
 
-  const handlePasswordSubmit = () => {
-    const isValid = validatePassword(email);
+  const handlePasswordSubmit = (): void => {
+    const isValid = validatePassword(password);
     if (!isValid) {
       setError(true);
       return;
@@ -69,7 +78,7 @@ export const AuthForm = () => {
     paginate(1);
   };
 
-  const handleConfirmPasswordSubmit = () => {
+  const handleConfirmPasswordSubmit = (): void => {
     const isValid = password === confirmPassword;
     if (!isValid) {
       setError(true);
@@ -78,8 +87,8 @@ export const AuthForm = () => {
     handleSubmitData();
   };
 
-  const handleSubmitData = async () => {
-    const data = { email: email, password: password };
+  const handleSubmitData = async (): Promise<void> => {
+    const data = { email, password };
     console.log(data);
     try {
       let response;
@@ -101,11 +110,15 @@ export const AuthForm = () => {
       }
       console.log(response);
       resetForm();
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
+      const axiosError = error as AxiosError<ErrorResponse>;
       addToast({
         title: 'Error',
-        description: error.response.data.errors || error.response.data.message,
+        description:
+          axiosError.response?.data?.errors ||
+          axiosError.response?.data?.message ||
+          'An error occurred',
         color: 'danger',
       });
     }
@@ -117,7 +130,7 @@ export const AuthForm = () => {
     'Confirm Password',
   ];
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     switch (page) {
       case 0: {
         handleEmailSubmit();
@@ -138,22 +151,21 @@ export const AuthForm = () => {
   };
 
   const Title = useCallback(
-    (props: React.PropsWithChildren<{}>) => (
+    ({ children }: { children: React.ReactNode }) => (
       <m.h1
         animate={{ opacity: 1, x: 0 }}
         className="text-xl font-medium text-text"
         exit={{ opacity: 0, x: -10 }}
         initial={{ opacity: 0, x: -10 }}
       >
-        {props.children}
+        {children}
       </m.h1>
     ),
-
     [page],
   );
 
-  const titleContent = useMemo(() => {
-    let title;
+  const titleContent = useMemo((): string | undefined => {
+    let title: string | undefined;
     switch (page) {
       case 0: {
         title = mode === 'signup' ? 'Sign Up' : 'Log in';
@@ -172,7 +184,7 @@ export const AuthForm = () => {
       }
     }
     return title;
-  }, [page]);
+  }, [page, mode]);
 
   const variants = {
     enter: (direction: number) => ({
@@ -191,7 +203,7 @@ export const AuthForm = () => {
     }),
   };
 
-  const paginate = (newDirection: number) => {
+  const paginate = (newDirection: number): void => {
     setPage([page + newDirection, newDirection]);
   };
 
