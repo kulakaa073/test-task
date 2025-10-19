@@ -20,23 +20,13 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
         } else if (data.type === 'audio') {
           // Forward audio data to OpenAI
           if (openaiConnection && isConnected) {
-            console.log(
-              'Received audio data, length:',
-              data.audio?.length || 0,
-            );
-
             // Send audio data to OpenAI in the correct format
-            try {
-              openaiConnection.send(
-                JSON.stringify({
-                  type: 'input_audio_buffer.append',
-                  audio: data.audio,
-                }),
-              );
-              console.log('Audio data sent to OpenAI successfully');
-            } catch (error) {
-              console.error('Error sending audio to OpenAI:', error);
-            }
+            openaiConnection.send(
+              JSON.stringify({
+                type: 'input_audio_buffer.append',
+                audio: data.audio,
+              }),
+            );
           }
         } else if (data.type === 'stop') {
           // Stop recording and close connections
@@ -80,7 +70,6 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
 
         openaiConnection.onopen = () => {
           isConnected = true;
-          console.log('Connected to OpenAI Realtime API');
 
           // Send session configuration
           openaiConnection!.send(
@@ -114,10 +103,8 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
         openaiConnection.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
-            console.log('OpenAI response type:', data.type);
 
             if (data.type === 'session.created') {
-              console.log('OpenAI session created');
               connection.send(
                 JSON.stringify({
                   type: 'session_ready',
@@ -128,7 +115,6 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
               data.type ===
               'conversation.item.input_audio_buffer.speech_started'
             ) {
-              console.log('Speech started');
               connection.send(
                 JSON.stringify({
                   type: 'speech_started',
@@ -138,7 +124,6 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
               data.type ===
               'conversation.item.input_audio_buffer.speech_stopped'
             ) {
-              console.log('Speech stopped');
               connection.send(
                 JSON.stringify({
                   type: 'speech_stopped',
@@ -147,13 +132,11 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
             } else if (
               data.type === 'conversation.item.input_audio_buffer.committed'
             ) {
-              console.log('Audio committed for transcription');
             } else if (
               data.type ===
               'conversation.item.input_audio_buffer.transcript.completed'
             ) {
               const transcript = data.transcript;
-              console.log('Transcript:', transcript);
               connection.send(
                 JSON.stringify({
                   type: 'transcript',
@@ -164,16 +147,13 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
               data.type ===
               'conversation.item.output_audio_buffer.speech_started'
             ) {
-              console.log('Assistant speech started');
             } else if (
               data.type ===
               'conversation.item.output_audio_buffer.speech_stopped'
             ) {
-              console.log('Assistant speech stopped');
             } else if (
               data.type === 'conversation.item.output_audio_buffer.committed'
             ) {
-              console.log('Assistant audio committed');
             } else if (
               data.type === 'conversation.item.output_audio_buffer.audio_added'
             ) {
@@ -189,7 +169,6 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
             } else if (data.type === 'conversation.item.message.content') {
               // Handle text response from assistant
               const content = data.content;
-              console.log('Assistant response:', content);
               connection.send(
                 JSON.stringify({
                   type: 'reply',
@@ -197,11 +176,8 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
                 }),
               );
             } else if (data.type === 'conversation.item.created') {
-              console.log('Conversation item created');
             } else if (data.type === 'conversation.item.updated') {
-              console.log('Conversation item updated');
             } else if (data.type === 'conversation.updated') {
-              console.log('Conversation updated');
             } else if (data.type === 'error') {
               console.error('OpenAI API error:', data.error);
               connection.send(
@@ -228,7 +204,6 @@ export const websocketRoutes: FastifyPluginAsync = async (fastify, options) => {
         };
 
         openaiConnection.onclose = () => {
-          console.log('OpenAI WebSocket connection closed');
           isConnected = false;
         };
       } catch (error) {
