@@ -16,6 +16,7 @@
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "@fastify/sensible": "^6.0.3",
+    "@fastify/websocket": "^11.2.0",
     "@goodrequest/joi-type-extract": "^0.0.5",
     "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
